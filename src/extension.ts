@@ -16,7 +16,15 @@ export function activate(context: vscode.ExtensionContext) {
 	let disposable = vscode.commands.registerCommand('vscode-tutorial-plugin.helloWorld', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from vscode_tutorial_plugin!');
+		const pushed_button = vscode.window.showInformationMessage('Hello World from vscode_tutorial_plugin!', "tekitou", "mouikko");
+		pushed_button.then((value) => {
+			// コンソールログに押下したボタン名（Button1 or Button2）が表示されます。
+			console.log(value);
+
+			if(value === "tekitou"){  
+				console.log("hazure!");
+			}
+		  });
 	});
 
 	context.subscriptions.push(disposable);
