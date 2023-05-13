@@ -30,6 +30,7 @@ export default class Completions implements vscode.CompletionItemProvider
     public provideCompletionItems(): vscode.ProviderResult<vscode.CompletionItem[]>
     {
         const commandCompletion = new vscode.CompletionItem('new');
+        commandCompletion.kind = vscode.CompletionItemKind.Event;
         commandCompletion.insertText = 'new ';
         commandCompletion.command = { command: 'editor.action.triggerSuggest', title: 'Re-trigger completions...' };
 
