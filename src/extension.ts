@@ -29,7 +29,8 @@ export function activate(context: vscode.ExtensionContext) {
 	// context.subscriptions.push(disposable);
 
 	// 補完機能を push
-    const provider = vscode.languages.registerCompletionItemProvider('plaintext', new Completions(), '.');
+    // const provider = vscode.languages.registerCompletionItemProvider('plaintext', new Completions(), '.');
+	const provider = vscode.languages.registerCompletionItemProvider('plaintext', new Completions());
     context.subscriptions.push(provider);
 
 }

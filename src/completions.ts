@@ -27,13 +27,53 @@ export default class Completions implements vscode.CompletionItemProvider
     //     return [commitCharacterCompletion];
     // }
 
-    public provideCompletionItems(): vscode.ProviderResult<vscode.CompletionItem[]>
-    {
-        const commandCompletion = new vscode.CompletionItem('new');
-        commandCompletion.kind = vscode.CompletionItemKind.Event;
-        commandCompletion.insertText = 'new ';
-        commandCompletion.command = { command: 'editor.action.triggerSuggest', title: 'Re-trigger completions...' };
+    // public provideCompletionItems(): vscode.ProviderResult<vscode.CompletionItem[]>
+    // {
+    //     const commandCompletion = new vscode.CompletionItem('new');
+    //     commandCompletion.kind = vscode.CompletionItemKind.Event;
+    //     commandCompletion.insertText = 'new ';
+    //     commandCompletion.command = { command: 'editor.action.triggerSuggest', title: 'Re-trigger completions...' };
 
-        return [commandCompletion];
+    //     return [commandCompletion];
+    // }
+
+    public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position): vscode.ProviderResult<vscode.CompletionItem[]>
+    {
+        const line = document.lineAt(position).text;
+
+        const isSnakecase = line.indexOf('_') > 0;
+        if (!isSnakecase) { return undefined; }
+
+        // キャメルケースに書き換える
+        const camelcase = this.snakeToCamel(line);
+        console.log(`old: ${line}\nnew: ${camelcase}`);
+
+        return [];
+        // return [
+        //     new vscode.CompletionItem('log', vscode.CompletionItemKind.Method),
+        //     new vscode.CompletionItem('warn', vscode.CompletionItemKind.Method),
+        //     new vscode.CompletionItem('error', vscode.CompletionItemKind.Method),
+        // ];
+    }
+
+    // snake_case -> SnakeCase
+    private snakeToCamel(snake: string): string
+    {
+        var camel = '';
+        var needConvertBigChar = false;
+        for (let i = 0; i < snake.length; i++) {
+            const char = snake[i];
+            if(char === '_'){ 
+                // _は無視して進む
+                needConvertBigChar = true;
+                continue; 
+            }
+            
+            let newChar = needConvertBigChar ? char.toLocaleUpperCase() : char;
+            camel = camel + newChar;
+            needConvertBigChar = false;
+        }
+        
+        return camel;
     }
 }
