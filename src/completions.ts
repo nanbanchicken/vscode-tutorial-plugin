@@ -5,7 +5,7 @@ export default class Completions implements vscode.CompletionItemProvider
     // public provideCompletionItems(): vscode.ProviderResult<vscode.CompletionItem[]>
     // {
     //     const simpleCompletion = new vscode.CompletionItem('hello_world');
-    //     simpleCompletion.documentation = new vscode.MarkdownString('wa-i!!');
+    //     // simpleCompletion.documentation = new vscode.MarkdownString('wa-i!!');
     //     simpleCompletion.insertText = 'helloWorld';
     //     return [simpleCompletion];
     // }
@@ -48,7 +48,11 @@ export default class Completions implements vscode.CompletionItemProvider
         const camelcase = this.snakeToCamel(line);
         console.log(`old: ${line}\nnew: ${camelcase}`);
 
-        return [];
+        // 入力補完
+        const snakeToCamelCompletion = new vscode.CompletionItem(line);
+        snakeToCamelCompletion.insertText = camelcase;
+        return [snakeToCamelCompletion];
+
         // return [
         //     new vscode.CompletionItem('log', vscode.CompletionItemKind.Method),
         //     new vscode.CompletionItem('warn', vscode.CompletionItemKind.Method),

@@ -7,6 +7,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// // キャメル
 	// let pushedButton;
+	// let PushedButton;
 	// // スネーク
 	// let pushed_button;
 	// // 亀
