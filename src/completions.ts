@@ -40,24 +40,24 @@ export default class Completions implements vscode.CompletionItemProvider
     public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position): vscode.ProviderResult<vscode.CompletionItem[]>
     {
         const line = document.lineAt(position).text;
+        const lastWord = line.split(' ').slice(-1)[0];
+        console.log(lastWord);
+
+        // aaa bbb cccccc -> ['aaa', 'bbb', 'ccc_ccc']
+        // aaa bbbvv ccc -> ['aaa', 'bbb_vv', 'ccc']
+        // aaa ここを_snakeToCamelしたい ここは意図してにアンダーバーを入れたい____ -> ['aaa', 'bbb_vv', 'ccc']
 
         const isSnakecase = line.indexOf('_') > 0;
         if (!isSnakecase) { return undefined; }
 
         // キャメルケースに書き換える
-        const camelcase = this.snakeToCamel(line);
-        console.log(`old: ${line}\nnew: ${camelcase}`);
+        const camelcase = this.snakeToCamel(lastWord);
+        console.log(`old: ${lastWord}\nnew: ${camelcase}`);
 
         // 入力補完
-        const snakeToCamelCompletion = new vscode.CompletionItem(line);
+        const snakeToCamelCompletion = new vscode.CompletionItem(lastWord);
         snakeToCamelCompletion.insertText = camelcase;
         return [snakeToCamelCompletion];
-
-        // return [
-        //     new vscode.CompletionItem('log', vscode.CompletionItemKind.Method),
-        //     new vscode.CompletionItem('warn', vscode.CompletionItemKind.Method),
-        //     new vscode.CompletionItem('error', vscode.CompletionItemKind.Method),
-        // ];
     }
 
     // snake_case -> SnakeCase
