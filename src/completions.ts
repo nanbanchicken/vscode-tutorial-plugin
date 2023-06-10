@@ -47,7 +47,9 @@ export default class Completions implements vscode.CompletionItemProvider
         // aaa bbbvv ccc -> ['aaa', 'bbb_vv', 'ccc']
         // aaa ここを_snakeToCamelしたい ここは意図してにアンダーバーを入れたい____ -> ['aaa', 'bbb_vv', 'ccc']
 
-        const isSnakecase = line.indexOf('_') > 0;
+        // BUG: 入力済みの位置に移動しての入力補完がきかない
+        // BUG: 入力済みのキーワードでの入力補完が優先されてsnakeToCamelされない
+        const isSnakecase = line.indexOf('_') >= 0;
         if (!isSnakecase) { return undefined; }
 
         // キャメルケースに書き換える
