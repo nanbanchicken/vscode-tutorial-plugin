@@ -41,6 +41,13 @@ export default class Completions implements vscode.CompletionItemProvider
     {
         const line = document.lineAt(position).text;
         const lastWord = line.split(' ').slice(-1)[0];
+        console.log(position);
+        // TODO lastwodでない単語も変換できるようにする
+        // TODO カーソル位置の単語を取り出す、操作，置換する
+        // NOTE position c: 行番号 e: 行内のカーソル位置
+
+        // const theWrodAtCursor = line.position
+        // line 'aaa bbb ccc_c'
         console.log(lastWord);
 
         // aaa bbb cccccc -> ['aaa', 'bbb', 'ccc_ccc']
