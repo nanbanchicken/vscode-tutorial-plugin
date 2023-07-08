@@ -40,31 +40,27 @@ export default class Completions implements vscode.CompletionItemProvider
     public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position): vscode.ProviderResult<vscode.CompletionItem[]>
     {
         const line = document.lineAt(position).text;
-        const lastWord = line.split(' ').slice(-1)[0];
-        console.log(position);
-        // TODO lastwodでない単語も変換できるようにする
-        // TODO カーソル位置の単語を取り出す、操作，置換する
-        // NOTE position c: 行番号 e: 行内のカーソル位置
+        const wordRange = document.getWordRangeAtPosition(position);
+        const word = line.substring(wordRange!.start.character, wordRange!.end.character);
+        console.log(word);
 
-        // const theWrodAtCursor = line.position
-        // line 'aaa bbb ccc_c'
-        console.log(lastWord);
+        // NOTE スネークケースが残っているところを教えてくれる
+        // NOTE position c: 行番号 e: 行内のカーソル位置
 
         // aaa bbb cccccc -> ['aaa', 'bbb', 'ccc_ccc']
         // aaa bbbvv ccc -> ['aaa', 'bbb_vv', 'ccc']
         // aaa ここを_snakeToCamelしたい ここは意図してにアンダーバーを入れたい____ -> ['aaa', 'bbb_vv', 'ccc']
 
-        // BUG: 入力済みの位置に移動しての入力補完がきかない
         // BUG: 入力済みのキーワードでの入力補完が優先されてsnakeToCamelされない
         const isSnakecase = line.indexOf('_') >= 0;
         if (!isSnakecase) { return undefined; }
 
         // キャメルケースに書き換える
-        const camelcase = this.snakeToCamel(lastWord);
-        console.log(`old: ${lastWord}\nnew: ${camelcase}`);
+        const camelcase = this.snakeToCamel(word);
+        console.log(`old: ${word}\nnew: ${camelcase}`);
 
         // 入力補完
-        const snakeToCamelCompletion = new vscode.CompletionItem(lastWord);
+        const snakeToCamelCompletion = new vscode.CompletionItem(word);
         snakeToCamelCompletion.insertText = camelcase;
         return [snakeToCamelCompletion];
     }
