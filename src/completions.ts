@@ -30,24 +30,59 @@ export default class Completions implements vscode.CompletionItemProvider
         return [snakeToCamelCompletion];
     }
 
-    // snake_case -> SnakeCase
-    private snakeToCamel(snake: string): string
-    {
-        var camel = '';
-        var needConvertBigChar = false;
+    // // snake_case -> SnakeCase
+    // private snakeToCamel(snake: string): string
+    // {
+    //     var camel = '';
+    //     var needConvertBigChar = false;
+    //     for (let i = 0; i < snake.length; i++) {
+    //         const char = snake[i];
+    //         if(char === '_'){ 
+    //             // _は無視して進む
+    //             needConvertBigChar = true;
+    //             continue; 
+    //         }
+            
+    //         let newChar = needConvertBigChar ? char.toLocaleUpperCase() : char;
+    //         camel = camel + newChar;
+    //         needConvertBigChar = false;
+    //     }
+        
+    //     return camel;
+    // }
+
+    // ChatGPT案
+    // "abc_def" -> "abcDef"
+    // "abc_def123" -> "abcDef123"
+    // "abc_ここは無視_def" -> "abcここは無視Def"
+    private snakeToCamel(snake: string): string {
+        let camel = '';
+        let needConvertBigChar = false;
         for (let i = 0; i < snake.length; i++) {
             const char = snake[i];
-            if(char === '_'){ 
-                // _は無視して進む
+            if (char === '_') {
+                // アンダースコアが見つかったら、次の文字の大文字変換を行うフラグを立てる
                 needConvertBigChar = true;
-                continue; 
+                continue;
             }
-            
-            let newChar = needConvertBigChar ? char.toLocaleUpperCase() : char;
-            camel = camel + newChar;
-            needConvertBigChar = false;
+    
+            // 英語以外の文字の場合、大文字変換フラグをオフにして、その文字をそのままキャメルケースに追加
+            if (!char.match(/[a-zA-Z]/)) {
+                needConvertBigChar = false;
+                camel += char;
+                continue;
+            }
+    
+            // アンダースコアが直後にある場合も、次の文字を大文字変換してキャメルケースに追加
+            if (needConvertBigChar) {
+                camel += char.toUpperCase();
+                needConvertBigChar = false;
+            } else {
+                camel += char;
+            }
         }
-        
+    
         return camel;
     }
+    
 }
