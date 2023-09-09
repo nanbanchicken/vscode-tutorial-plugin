@@ -16,9 +16,13 @@ export function activate(context: vscode.ExtensionContext) {
 	// let nottubedhsup;
 
 	// 補完機能を push
-    // const provider = vscode.languages.registerCompletionItemProvider('plaintext', new Completions(), '.');
-	const provider = vscode.languages.registerCompletionItemProvider('plaintext', new Completions());
-    context.subscriptions.push(provider);
+    // 対応言語: c, javascript, plaintext, bat
 
+	const supportLanguage = ["c", "javascript", "bat"];
+	supportLanguage.forEach(language => {
+		vscode.languages.registerCompletionItemProvider(language, new Completions());
+	});
+	const provider =  vscode.languages.registerCompletionItemProvider("plaintext", new Completions());
+	context.subscriptions.push(provider);
 }
 export function deactivate() {}
