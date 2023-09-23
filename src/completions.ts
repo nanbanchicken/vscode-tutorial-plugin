@@ -25,8 +25,8 @@ export default class Completions implements vscode.CompletionItemProvider
         console.log(`old: ${word}\nnew: ${camelcase}`);
 
         // 入力補完
-        const snakeToCamelCompletion = new vscode.CompletionItem(word);
-        snakeToCamelCompletion.insertText = camelcase;
+        const snakeToCamelCompletion = new vscode.CompletionItem(camelcase);
+        snakeToCamelCompletion.filterText = word;
         return [snakeToCamelCompletion];
     }
 
